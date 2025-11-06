@@ -1,3 +1,5 @@
+from typing import Any
+
 from database.DB_connect import ConnessioneDB
 from model.artefattoDTO import Artefatto
 
@@ -11,3 +13,25 @@ class ArtefattoDAO:
         pass
 
     # TODO
+    def leggi_artefatto(self, museo:str, epoca:str) -> list[Any] | None:
+        artefatti = []
+        cnx = ConnessioneDB.get_connection()
+        try:
+            cursor = cnx.cursor(dictionary=True)
+            query = ("SELECT * "
+                     "FROM artefatto "
+                     "WHERE (epoca = COALESCE(%s, epoca)) "
+                     "AND (id_museo = COALESCE(%s, id_museo))")
+            cursor.execute(query,(epoca,museo))
+            for row in cursor:
+                artefatto = Artefatto(id = row["id"],
+                                      nome = row["nome"],
+                                      tipologia = row["tipologia"],
+                                      epoca = row["epoca"],
+                                      id_museo = row["id_museo"])
+                artefatti.append(artefatto)
+            cursor.close()
+            cnx.close()
+            return artefatti
+        except Exception as e:
+            print(e)

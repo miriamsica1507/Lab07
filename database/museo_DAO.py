@@ -13,7 +13,7 @@ class MuseoDAO:
         pass
 
     # TODO
-    def leggi_musei(self, museo:str):
+    def leggi_musei(self, museo: str | None = None):
         musei = []
         cnx = ConnessioneDB.get_connection()
         try:

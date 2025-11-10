@@ -13,16 +13,16 @@ class ArtefattoDAO:
         pass
 
     # TODO
-    def leggi_artefatto(self, museo:str, epoca:str) -> list[Any] | None:
+    def leggi_artefatto(self, museo: str | None = None, epoca: str | None = None):
         artefatti = []
         cnx = ConnessioneDB.get_connection()
         try:
             cursor = cnx.cursor(dictionary=True)
             query = ("SELECT * "
                      "FROM artefatto "
-                     "WHERE (epoca = COALESCE(%s, epoca)) "
-                     "AND (id_museo = COALESCE(%s, id_museo))")
-            cursor.execute(query,(epoca,museo))
+                     "WHERE (%s IS NULL OR id_museo = %s) "
+                     "AND (%s IS NULL OR epoca = %s)")
+            cursor.execute(query,(museo,museo,epoca,epoca))
             for row in cursor:
                 artefatto = Artefatto(id = row["id"],
                                       nome = row["nome"],
@@ -34,4 +34,5 @@ class ArtefattoDAO:
             cnx.close()
             return artefatti
         except Exception as e:
-            print(e)
+            print("Errore in leggi_artefatto:", e)
+            return []

@@ -11,6 +11,8 @@ def main(page: ft.Page):
     my_controller = Controller(my_view, my_model)
     my_view.set_controller(my_controller)
     my_view.load_interface()
+    page.update()
 
+    my_controller.handler_popola_dropdown()
 
 ft.app(target=main)

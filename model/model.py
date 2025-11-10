@@ -15,21 +15,16 @@ class Model:
         self._artefatto_dao = ArtefattoDAO()
 
     # --- ARTEFATTI ---
-    def get_artefatti_filtrati(self, museo:str, epoca:str):
+    def get_artefatti_filtrati(self, museo: str | None = None, epoca: str | None = None):
         """Restituisce la lista di tutti gli artefatti filtrati per museo e/o epoca (filtri opzionali)."""
         # TODO
-        artefatti_filtrati = []
-        for artefatto in self._artefatto_dao.leggi_artefatto(museo):
-            artefatti_filtrati.append(artefatto)
-            for artefatto_e in self._artefatto_dao.leggi_artefatto(epoca):
-                artefatti_filtrati.append(artefatto_e)
-        return artefatti_filtrati
+        return self._artefatto_dao.leggi_artefatto(museo, epoca)
     def get_epoche(self):
         """Restituisce la lista di tutte le epoche."""
         # TODO
     # --- MUSEI ---
         epoche = []
-        artefatti = self._artefatto_dao.leggi_artefatto()
+        artefatti = self._artefatto_dao.leggi_artefatto(None,None) or []
         for element in artefatti:
             if element.epoca not in epoche:
                 epoche.append(element.epoca)

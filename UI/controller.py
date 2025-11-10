@@ -32,6 +32,8 @@ class Controller:
         for epoca in epoche:
             self._view.dd_epoca.options.append(ft.dropdown.Option(text=epoca))
 
+        self._view.page.update()
+
 
     # CALLBACKS DROPDOWN
     # TODO
@@ -47,10 +49,10 @@ class Controller:
     def handler_mostra_artefatti(self,e):
         museo = self._view.dd_museo.value
         epoca = self._view.dd_epoca.value
+        artefatti = self._model.get_artefatti_filtrati(museo, epoca)
 
         self._view.lista_artefatti.controls.clear()
 
-        artefatti = self._model.get_artefatti_filtrati(museo,epoca)
         if not artefatti:
             self._view.show_alert("Non hai inserito artefatti!")
             return
